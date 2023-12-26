@@ -206,6 +206,8 @@ class Node:
         """Get a child node by name or name and unit address"""
         if '@' in handle:
             name, addr_s = handle.split('@')
+            if addr_s.startswith('0x'):
+                addr_s = addr_s[2:]
             address = int(addr_s, base=16)
             nodes = list(filter(lambda n: n.name == name and n.address == address, self.children))
         else:
@@ -287,6 +289,15 @@ class Node:
             if len(cast(PropertyValues, fields)) != 0:
                 return fields[0]
         return None
+
+    def remove_property(self, name: str) -> None:
+        """Remove property"""
+        for i in range(len(self.properties)):
+            pp = self.properties[i]
+            if pp.name == name:
+                del self.properties[i]
+                return
+        raise RuntimeError(f"Property '{name}' not found")
 
     def get_reg(self) -> Optional[RegArray]:
         """If the node defines a `reg` property, return a RegArray for easier querying"""

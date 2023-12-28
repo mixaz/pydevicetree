@@ -290,14 +290,14 @@ class Node:
                 return fields[0]
         return None
 
-    def remove_property(self, name: str) -> None:
+    def remove_property(self, name: str) -> bool:
         """Remove property"""
         for i in range(len(self.properties)):
             pp = self.properties[i]
             if pp.name == name:
                 del self.properties[i]
-                return
-        raise RuntimeError(f"Property '{name}' not found")
+                return True
+        return False
 
     def get_reg(self) -> Optional[RegArray]:
         """If the node defines a `reg` property, return a RegArray for easier querying"""
